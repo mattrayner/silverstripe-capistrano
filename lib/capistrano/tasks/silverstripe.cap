@@ -29,7 +29,7 @@ namespace :silverstripe do
                     releases = capture(:ls, '-xr', releases_path).split
                     if releases.length > 0
                         last_release = releases.first
-                        execute :mysqldump, "-u#{fetch(:db_user)} --password='#{fetch(:db_password)}' #{fetch(:db_name)} > ./#{last_release}.sql"
+                        execute :mysqldump, "-u#{fetch(:db_user)} --password='#{fetch(:db_password)}' --host='#{fetch(:db_host)}' #{fetch(:db_name)} > ./#{last_release}.sql"
                     end
                 end
             end
@@ -54,11 +54,10 @@ namespace :silverstripe do
                     if releases.length > 1
                         latest_release = releases[0]
                         rollback_release = releases[1]
-                        execute :mysqldump, "-u#{fetch(:db_user)} --password='#{fetch(:db_password)}' #{fetch(:db_name)} > ../rolled-back-release-#{latest_release}.sql && mysql -u#{fetch(:db_user)} --password='#{fetch(:db_password)}' #{fetch(:db_name)} < ./#{rollback_release}.sql"
+                        execute :mysqldump, "-u#{fetch(:db_user)} --password='#{fetch(:db_password)}' --host='#{fetch(:db_host)}' #{fetch(:db_name)} > ../rolled-back-release-#{latest_release}.sql && mysql -u#{fetch(:db_user)} --password='#{fetch(:db_password)}' --host='#{fetch(:db_host)}' #{fetch(:db_name)} < ./#{rollback_release}.sql"
                     end
                 end
             end
         end
     end
-
 end

@@ -7,6 +7,7 @@ set :root_dir, '/var/www/my_app'
 set :website_url, 'http://example.com'
 
 # Database settings, used for taking backups and restoring databases
+set :db_host, 'localhost'
 set :db_name, 'db_name'
 set :db_user, 'db_user'
 set :db_password, 'db_password'
