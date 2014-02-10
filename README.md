@@ -1,4 +1,4 @@
-# SilverStripe Capistrano v0.0.1-beta
+# SilverStripe Capistrano v0.0.2-beta
 
 A recipe and configuration for managing a SilverStripe application with Capistrano
 
@@ -60,6 +60,18 @@ You'll need to setup the directory where Capistrano files will live on the serve
 
 Within this directory, it’s recommended that directories for the `tmp_dir` as well as a `shared` directory be created. Within the `shared` directory, create a `silverstripe-cache` directory, a `vendor` directory (for Composer updates), and upload any shared files and folders that all deploys will share. This will likely include the `assets` directory, config files, and any other files and folders that are not tracked by Git. All of the files and directores within the `shared` directory will need to be added to the `linked_files` and `linked_dirs` variables in the `deploy.rb` config file.
 
+### SilverStripe Configuration ###
+
+In order for `sake` to run a `dev/build` on the server, you'll need to update your `_ss_environment.php` config so that it includes the `_FILE_TO_URL_MAPPING` variable:
+
+```php
+// This is used by sake to know which directory points to which URL
+global $_FILE_TO_URL_MAPPING;
+$_FILE_TO_URL_MAPPING[__DIR__] = 'http://capistrano.soulcraftgroup.com';
+```
+
+More information about this can be found on the [SilverStripe Documentation](http://doc.silverstripe.org/framework/en/topics/commandline) site.
+
 ### Final Steps ###
 
 To make sure that Git is setup properly for a successful deploy, it’s recommended that a `git:check` be executed prior to deploying for the first time:
@@ -74,7 +86,7 @@ In order for the remote server to use the Capistrano deployment, the root web di
 
 `ln -sf ~/capistrano/current ~/public_html`
 
-***Note**: The paths above are for example purposes and may be different for your configuration.*
+*Note: The paths above are for example purposes and may be different for your configuration.*
 
 Don’t forget to import in any changes to the database! Be sure and test the site to ensure that everything is working as it should.
 
