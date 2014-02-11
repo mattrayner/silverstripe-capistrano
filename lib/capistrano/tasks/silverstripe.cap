@@ -4,7 +4,7 @@ namespace :silverstripe do
         task :update do
             on roles(:web) do
                 within release_path do
-                    execute 'php', 'composer.phar', 'update'
+                    execute :php, "composer.phar update"
                 end
             end
         end
@@ -14,9 +14,10 @@ namespace :silverstripe do
     task :build do
         on roles(:web) do
             within fetch(:root_dir) do
-                execute 'framework/sake', 'dev/build'
-                execute 'rm', '-R', './silverstripe-cache/*'
-                execute 'curl', fetch(:website_url)
+                execute :php, "framework/cli-script.php dev/build"
+                execute :rm, "-R ./silverstripe-cache/*"
+                # Need to figure out issues with flushing the cache before enabling curl
+                # execute :curl, fetch(:website_url)
             end
         end
     end
