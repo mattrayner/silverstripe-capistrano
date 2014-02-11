@@ -67,7 +67,7 @@ In order for `sake` to run a `dev/build` on the server, you'll need to update yo
 ```php
 // This is used by sake to know which directory points to which URL
 global $_FILE_TO_URL_MAPPING;
-$_FILE_TO_URL_MAPPING[__DIR__] = 'http://capistrano.soulcraftgroup.com';
+$_FILE_TO_URL_MAPPING[realpath('/var/www/public_html')] = 'http://www.yoursite.com';
 ```
 
 More information about this can be found on the [SilverStripe Documentation](http://doc.silverstripe.org/framework/en/topics/commandline) site.
@@ -90,6 +90,13 @@ In order for the remote server to use the Capistrano deployment, the root web di
 
 Don’t forget to import in any changes to the database! Be sure and test the site to ensure that everything is working as it should.
 
+### Problems with Caching ###
+
+One problem that I haven't been able to figure out is the need to run a flush of the cache after a deploy. So, be sure to run a flush after deploying:
+
+`http://www.yoursite.com/?flush=all`
+
+**The problem is that if the environment mode is set to anything other than `dev` then a manual flush will be required. I tried a number of things but just couldn't get it to work right. If anyone can help out in figuring this out that would be awesome!**
 
 ## Bugtracker ##
 
