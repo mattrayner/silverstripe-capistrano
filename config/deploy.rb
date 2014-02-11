@@ -34,8 +34,11 @@ set :linked_dirs, %w{silverstripe-cache assets vendor}
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+# Directory to save database backups in
+set :db_backup_dir, '/var/www/my_app/db_backup'
+
 # Location for storing temporary files created by Capistrano routines
-set :tmp_dir, "/var/www/my_app/tmp"
+set :tmp_dir, '/var/www/my_app/tmp'
 
 namespace :deploy do
     before :updating, 'silverstripe:db:backup'
