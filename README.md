@@ -2,6 +2,13 @@
 
 A recipe and configuration for managing a SilverStripe application with Capistrano
 
+### NOTE: Development of this Capistrano recipe has stopped! ###
+
+Anyone interested in furthering and supporting this add-on, feel free to fork it! I'll be happy to answer any questions you might have to get you started.
+
+I have since moved on from Capistrano and now use [Shipit](https://github.com/neoziro/grunt-shipit) to manage SilverStripe deployments. Anyone interested in using Shipit should take a look at my [Shipit SilverStripe](https://github.com/jeffwhitfield/grunt-shipit-silverstripe) plugin, which was built using the same tasks as this Capistrano recipe.
+
+
 ## Installation ##
 
 * **Install Capistrano**
