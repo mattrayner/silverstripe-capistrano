@@ -1,73 +1,99 @@
-# SilverStripe Capistrano v0.0.2-beta
+# ![SilverStripe-Capistrano][logo]
 
-A recipe and configuration for managing a SilverStripe application with Capistrano
+SilverStripe-Capistrano is a collection of [Ruby][ruby] and [Capistrano][capistrano] files, allowing you to easily configure [SilverStripe][silverstripe] for deployments using [Capistrano][capistrano].
 
-### NOTE: Development of this Capistrano recipe has stopped! ###
+[![Version Number][shield-version]][info-version]
+[![License][shield-license]][info-license]
 
-Anyone interested in furthering and supporting this add-on, feel free to fork it! I'll be happy to answer any questions you might have to get you started.
+## Key Features
+- Kept up to date with changes to [SilverStripe][silverstripe] and [Capistrano][capistrano].
 
-I have since moved on from Capistrano and now use [Shipit](https://github.com/neoziro/grunt-shipit) to manage SilverStripe deployments. Anyone interested in using Shipit should take a look at my [Shipit SilverStripe](https://github.com/jeffwhitfield/grunt-shipit-silverstripe) plugin, which was built using the same tasks as this Capistrano recipe.
+
+## Getting Started
+### Installation
+#### Ruby
+SilverStripe-Capistrano has been tested with version `2.2.3` of ruby. To install `2.2.3` with [RVM][rvm] use the below command
+
+```bash
+rvm install 2.2.3
+rvm use 2.2.3
+```
+
+**Note:** This script *should* work with other versions of Ruby, your results may vary.
 
 
-## Installation ##
+#### Capistrano
+SilverStripe-Capistrano requires Capistrano version `3.4.0` which can be installed using the below command`
 
-* **Install Capistrano**
+```bash
+gem install capistrano -v 3.4.0
+```
 
-    Visit the Capistrano [Installation](http://capistranorb.com/documentation/getting-started/installation/) page for information on how to install Capistrano. If you've used Ruby before, installing it should be just a matter of running '`gem install capistrano`' from the command line.
 
-* **Commit application to Git**
+### Preparing your project
+**Commit your code to GIT** - before we can deploy our code it needs to be committed into GIT onto a branch we have access to.
 
-    Be sure and commit your code to a Git repo prior to setting up Capistrano.
+It is also recommended that you add the contents of `gitignore.example` to your `.gitignore` file.
 
-* **Move sensitive files out of repo**
 
-    Avoid committing config files and assets to the repo. Those will be added to a shared directory as linked files and directories. Be sure and remove these from being tracked and add their path to your `.gitignore` file. Take a look at the `gitignore.example` file for recommended additions to the `.gitignore` file.
+### Copying SilverStripe-Capistrano files into your project
+Using the script below, from the root or your project you can automate the download of our [Capistrano][capistrano] config.
 
-* **Copy all files from the SilverStripe Capistrano repo to your application repo**
+**NOTE:** The below script will **OVERWRITE** the contents of the files listed below which already exist in your project.
 
-    Included is a copy of Composer. To avoid issues with Composer being out of date on the remote server, the tasks used for SilverStripe updates have been configured to use this copy of Composer instead. If you'd like to make sure the version of Composer is up to date, run the following from the root of your repo after copying over the files:
+```bash
+mkdir -p config
+mkdir -p config/deploy
+curl -O https://raw.githubusercontent.com/mattrayner/silverstripe-capistrano/master/Gemfile
+curl -O https://raw.githubusercontent.com/mattrayner/silverstripe-capistrano/master/Capfile
+cd config
+curl -O https://raw.githubusercontent.com/mattrayner/silverstripe-capistrano/master/config/deploy.rb
+cd deploy
+curl -O https://raw.githubusercontent.com/mattrayner/silverstripe-capistrano/master/config/deploy/staging.rb
+curl -O https://raw.githubusercontent.com/mattrayner/silverstripe-capistrano/master/config/deploy/production.rb
+cd ../..
+```
 
-    `curl -sS https://getcomposer.org/installer | php`
+Alternatively you can copy each of the files into your repository manually. This is the recommended approach if you have any file clashes.
 
-* **Configure Capistrano**
 
-    Before going any further, be sure and configure Capistrano using the instructions below.
+### Configuring Capistrano
+If you are unfamiliar with Capistrano, it's recommended that you read over the documentation on the [Capistrano][capistrano] website. This will give you a good overview of how it works as well as details on how to properly configure a Capistrano installation.
 
-## Configuration ##
 
-If you are unfamiliar with Capistrano, it's recommended that you read over the documentation on the [Capistrano](http://capistranorb.com/) website. This will give you a good overview of how it works as well as details on how to properly configure a Capistrano installation.
-
-### Server Configuration ###
-
+#### Server Configuration
 Start off by configuring the `staging.rb` and `production.rb` files in the `/config/deploy` directory. Feel free to add or remove server configuration files as needed. Just be sure and set appropriate config names at the top (ie. `set :prod, :production`).
 
 There are a few custom variables at the top that differ from the default Capistrano configuration. These are necessary to allow the SilverStripe tasks to work properly.
 
-Set the `root_dir` variable to point to the directory used by your application. This will be used to execute the tasks required to build and recache your application after a successful deploy. This will be the same path that is used for the symbolic link that points to the current Capistrano release (ie. `htdocs`, `public_html`, `www`, etc.).
-
 Set the `website_url` to the full web address of your application. This is used to recache the homepage of your site after a build.
 
-Set the three database variables for the database name, username, and password of the MySQL database used for your SilverStripe application. This will allow backup and restore tasks to be performed during a deploy or rollback.
+Set the `flush_url` to the desired flush web address for your application. This will be used in an attempt to flush your application's front-end cache.
+
+Set the four database variables for the database host, name, username, and password of the MySQL database used for your SilverStripe application. This will allow backup and restore tasks to be performed during a deploy or rollback.
 
 It’s recommended that a SSH key be setup rather than adding a password to the config files. Visit the [Github](https://help.github.com/articles/generating-ssh-keys) site for help on generating a SSH key.
 
-### Deploy Configuration ###
 
+#### Deploy Configuration
 Continue configuration by updating the `deploy.rb` file in the `/config` directory. If needed, use the [Preparing Your Application](http://capistranorb.com/documentation/getting-started/preparing-your-application/) page on the Capistrano website for reference. The `application`, `repo_url`, and `deploy_to` variables are required by default.
 
 The `deploy_to` variable should point to where you want your Capistrano files to live on the server. If you're managing multiple applications on the same server then you might want to deploy them based on application name. I typically create a `capistrano` directory that's just above where all the site files live. Where and how you wish to manage your Capistrano deploys is entirely up to you though.
 
-Towards the bottom of the `deploy.rb` config is a variable called `tmp_dir`. It's recommended that you set this one explicitly to avoid errors.
+Towards the bottom of the `deploy.rb` file there are two variables, `tmp_dir` and `db_backup_dir`. It's recommended that you set these explicitly to avoid errors.
 
 It's also recommended that you check the `linked_files` and `linked_dirs` to ensure that they include the files and directories that are not tracked by the repo. These files and directories will need to be added to the `shared` directory, which we'll get to in a sec.
 
-### Remote Server Configuration ###
 
+#### Remote Server Configuration
 You'll need to setup the directory where Capistrano files will live on the server. Be sure that this matches what you set for the `deploy_to` variable in the `deploy.rb` config file.
 
-Within this directory, it’s recommended that directories for the `tmp_dir` as well as a `shared` directory be created. Within the `shared` directory, create a `silverstripe-cache` directory, a `vendor` directory (for Composer updates), and upload any shared files and folders that all deploys will share. This will likely include the `assets` directory, config files, and any other files and folders that are not tracked by Git. All of the files and directores within the `shared` directory will need to be added to the `linked_files` and `linked_dirs` variables in the `deploy.rb` config file.
+There are a number of directories you should create so that capistrano can work correctly. Run the below command to automate this process
 
-### SilverStripe Configuration ###
+Replace `ENVIRONMENT` with one of your server configurations i.e. `staging` or `production`.
+
+
+##### `_ss_environment.php` Configuration
 
 In order for `sake` to run a `dev/build` on the server, you'll need to update your `_ss_environment.php` config so that it includes the `_FILE_TO_URL_MAPPING` variable:
 
@@ -77,42 +103,75 @@ global $_FILE_TO_URL_MAPPING;
 $_FILE_TO_URL_MAPPING[realpath('/var/www/public_html')] = 'http://www.yoursite.com';
 ```
 
+You will need to replace `/var/www/public_html` and `http://www.yoursite.com` with the correct details for your setup.
+
 More information about this can be found on the [SilverStripe Documentation](http://doc.silverstripe.org/framework/en/topics/commandline) site.
 
-### Final Steps ###
 
-To make sure that Git is setup properly for a successful deploy, it’s recommended that a `git:check` be executed prior to deploying for the first time:
+#### Final Steps
 
-`cap staging git:check`
+To make sure that Git (and your server) is setup properly for a successful deploy, it’s recommended that a `deploy:check` be executed prior to deploying for the first time:
+
+`cap staging deploy:check`
 
 To run a deploy on either staging or production, simply call Capistrano for the environment of your choice:
 
 `cap production deploy`
 
-In order for the remote server to use the Capistrano deployment, the root web directory of the server (the one set in the `root_dir` variable) must be linked to the `current` folder within the Capistrano deployment directory. To do this, remove the directory that is currently being used as the root folder for the website and then recreate it as a symbolic link to the current folder:
-
-`ln -sf ~/capistrano/current ~/public_html`
-
-*Note: The paths above are for example purposes and may be different for your configuration.*
-
 Don’t forget to import in any changes to the database! Be sure and test the site to ensure that everything is working as it should.
 
-### Problems with Caching ###
 
-One problem that I haven't been able to figure out is the need to run a flush of the cache after a deploy. So, be sure to run a flush after deploying:
+## Changelog
+The full-ish changelog is available in [CHANGELOG.md][changelog]
 
-`http://www.yoursite.com/?flush=all`
 
-**The problem is that if the environment mode is set to anything other than `dev` then a manual flush will be required. I tried a number of things but just couldn't get it to work right. If anyone can help out in figuring this out that would be awesome!**
+## Requirements
+SilverStripe-Capistrano requires the following:
+* [Ruby][ruby] (tested with 2.2.3)
+* [Capistrano][capistrano] (designed for 3.4.0)
+* [Curl][curl] (for install script automation)
+* [Composer][composer] (required server-side to install SilverStripe)
 
-## Bugtracker ##
 
-Bugs are tracked on [github.com](https://github.com/jeffwhitfield/silverstripe-capistrano/issues). Feel free to offer suggestions and contribute to the codebase.
+## Roadmap
+A list (in no particular order) or future feature ideas:
+* Automation script.
+    * Some kind of php/ruby/sh script that will automatically setup SilverStripe-Capistrano within a project.
+* Custom GEM.
+    * Instead of adding Capistrano to your GEMFILE, we'll use our own which depends on a certain Capistrano version.
 
-## Links ##
 
- * [Capistrano](http://capistranorb.com/)
+## Contributing
+If you wish to submit a bug fix or feature, you can create a pull request and it will be merged pending a code review.
 
-## Changelog ##
+1. Clone it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create a new Pull Request
 
-[Changelog](https://github.com/jeffwhitfield/silverstripe-capistrano/blob/master/changelog.md)
+
+## Maintainers
+Originally created by [Jeff Whitfield][jeffwhitfield], now maintained by [Matt Rayner][mattrayner].
+
+
+## License
+SilverStripe-Capistrano is licensed under the [MIT License][info-license].
+
+[logo]: https://raw.github.com/mattrayner/silverstripe-capistrano/master/silverstripe-capistrano-logo.png
+
+[ruby]: https://www.ruby-lang.org/en/
+[capistrano]: http://capistranorb.com/
+[silverstripe]: https://www.silverstripe.org/
+[rvm]: https://rvm.io/
+[composer]: https://getcomposer.org/
+
+[changelog]: CHANGELOG.md
+
+[info-version]: https://github.com/mattrayner/silverstripe-capistrano
+[info-license]: LICENSE
+[shield-version]: https://img.shields.io/badge/Version-0.1.0--beta-brightgreen.svg
+[shield-license]: https://img.shields.io/badge/license-MIT-blue.svg
+
+[jeffwhitfield]: https://github.com/jeffwhitfield
+[mattrayner]: https://github.com/mattrayner
