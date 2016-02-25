@@ -1,1 +1,3 @@
-gem 'capistrano', '~> 3.1.0'
+source 'https://rubygems.org'
+
+gem 'capistrano', '~> 3.4.0'
