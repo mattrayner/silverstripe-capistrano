@@ -158,7 +158,7 @@ Originally created by [Jeff Whitfield][jeffwhitfield], now maintained by [Matt R
 ## License
 SilverStripe-Capistrano is licensed under the [MIT License][info-license].
 
-[logo]: https://raw.github.com/mattrayner/silverstripe-capistrano/master/silverstripe-capistrano-logo.png
+[logo]: https://cdn.rawgit.com/mattrayner/silverstripe-capistrano/cd79cdfc81b1d8435d954a6c68b20eeff375c9ae/silverstripe-capistrano-logo.svg
 
 [ruby]: https://www.ruby-lang.org/en/
 [capistrano]: http://capistranorb.com/
