@@ -165,6 +165,7 @@ SilverStripe-Capistrano is licensed under the [MIT License][info-license].
 [silverstripe]: https://www.silverstripe.org/
 [rvm]: https://rvm.io/
 [composer]: https://getcomposer.org/
+[curl]: https://curl.haxx.se/
 
 [changelog]: CHANGELOG.md
 
