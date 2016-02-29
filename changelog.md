@@ -1,5 +1,16 @@
 # Changelog
 
+### 0.1.1-beta - Feb 29, 2016
+
+* Updated rake task to run `composer install` rather than `composer update`
+* Updated rake task to remove `silverstipe-cache` folder contents before `dev/build`
+* Updated rake task to cURL specific URL to flush via the browser before `dev/build`
+* Updated rake task static string formatting to be consistent
+* Updated staging and production deploy sample files to include a per-environment `deploy_to` variable
+* Updated staging and production deploy samples to include a more flexible cURL command for front-end flushing
+* Updated staging and production deploy samples - commented out 'simple' server syntax
+* Revd version number
+
 ### 0.1.0-beta - Feb 25, 2016
 
 * Repository transferred to Matthew Rayner

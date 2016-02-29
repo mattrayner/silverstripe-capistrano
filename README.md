@@ -68,7 +68,7 @@ There are a few custom variables at the top that differ from the default Capistr
 
 Set the `website_url` to the full web address of your application. This is used to recache the homepage of your site after a build.
 
-Set the `flush_url` to the desired flush web address for your application. This will be used in an attempt to flush your application's front-end cache.
+Set the `curl_command` to the desired flush web address for your application. This will be used in an attempt to flush your application's front-end cache.
 
 Set the four database variables for the database host, name, username, and password of the MySQL database used for your SilverStripe application. This will allow backup and restore tasks to be performed during a deploy or rollback.
 
@@ -94,7 +94,6 @@ Replace `ENVIRONMENT` with one of your server configurations i.e. `staging` or `
 
 
 ##### `_ss_environment.php` Configuration
-
 In order for `sake` to run a `dev/build` on the server, you'll need to update your `_ss_environment.php` config so that it includes the `_FILE_TO_URL_MAPPING` variable:
 
 ```php
@@ -107,9 +106,20 @@ You will need to replace `/var/www/public_html` and `http://www.yoursite.com` wi
 
 More information about this can be found on the [SilverStripe Documentation](http://doc.silverstripe.org/framework/en/topics/commandline) site.
 
+###### **OPTIONAL** environment $_GET config
+This is an **optional** and not very secure addition you can make to your `_ss_environment.php` file. It will allow you to use `?flush=all` in dev move even on production installations. This is a less error-prone way of flushing the front-end cache on a production server.
+
+It is important however that you also consider the downsides. Useing the below code makes deploying a bit easier but also opens your website up to possible vulnerabilities.
+
+Any page can be viewed in `dev` mode. This is done entirely at your own risk and is not strictly required.
+
+```php
+$env_type = isset($_GET['env_type']) ? $_GET['env_type'] : 'test';
+define('SS_ENVIRONMENT_TYPE', $env_type);
+```
+
 
 #### Final Steps
-
 To make sure that Git (and your server) is setup properly for a successful deploy, it’s recommended that a `deploy:check` be executed prior to deploying for the first time:
 
 `cap staging deploy:check`
@@ -170,7 +180,7 @@ SilverStripe-Capistrano is licensed under the [MIT License][info-license].
 
 [info-version]: https://github.com/mattrayner/silverstripe-capistrano
 [info-license]: LICENSE
-[shield-version]: https://img.shields.io/badge/Version-0.1.0--beta-brightgreen.svg
+[shield-version]: https://img.shields.io/badge/Version-0.1.1--beta-brightgreen.svg
 [shield-license]: https://img.shields.io/badge/license-MIT-blue.svg
 
 [jeffwhitfield]: https://github.com/jeffwhitfield
