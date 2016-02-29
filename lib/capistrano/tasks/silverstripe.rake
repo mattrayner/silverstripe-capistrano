@@ -4,7 +4,7 @@ namespace :silverstripe do
     task :update do
       on roles(:web) do
         within release_path do
-          execute :composer, "update"
+          execute :composer, 'install'
         end
       end
     end
@@ -13,14 +13,14 @@ namespace :silverstripe do
   desc 'Run SilverStripe dev/build'
   task :build do
     on roles(:web) do
-      within release_path do
-        execute :php, "framework/cli-script.php dev/build"
+      within fetch(:deploy_to) do
+        execute :rm, '-R shared/silverstripe-cache/*'
+        # Need to figure out issues with flushing the cache before enabling curl
+        execute :curl, "#{fetch(:curl_command)} -v -L"
       end
 
-      within fetch(:deploy_to) do
-        # execute :rm, "-R shared/silverstripe-cache/*"
-        # Need to figure out issues with flushing the cache before enabling curl
-        execute :curl, fetch(:flush_url)
+      within release_path do
+        execute :php, 'framework/cli-script.php dev/build'
       end
     end
   end

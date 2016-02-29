@@ -1,10 +1,14 @@
 set :stage, :staging
 
+# The deploy location for our
+set :deploy_to, '/var/www/my_app'
+
 # Full URL for the website
 set :website_url, 'http://example.com'
 
-# Full URL to generate a flush i.e. http://username:password@example.com/?flush=1
-set :flush_url, 'http://example.com/?flush=1'
+# Full URL and any environment-specific arguments to pass to cURL
+# set :curl_command, '--user user:pass http://example.com/?flush=all&env_type=dev' # Example with BASIC auth
+set :curl_command, 'http://example.com/?flush=all&env_type=dev'
 
 # Git Branch
 set :branch, 'dev-master'
@@ -21,9 +25,9 @@ set :db_password, 'db_password'
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{deploy@example.com}
-role :web, %w{deploy@example.com}
-role :db,  %w{deploy@example.com}
+# role :app, %w{deploy@example.com}
+# role :web, %w{deploy@example.com}
+# role :db,  %w{deploy@example.com}
 
 # Extended Server Syntax
 # ======================
@@ -31,7 +35,7 @@ role :db,  %w{deploy@example.com}
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
+server 'example.com', user: 'deploy', roles: %w{web app db}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
