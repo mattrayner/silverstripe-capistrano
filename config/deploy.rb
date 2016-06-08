@@ -41,6 +41,7 @@ set :db_backup_dir, "#{deploy_to}/db_backup"
 set :tmp_dir, "#{deploy_to}/tmp"
 
 namespace :deploy do
+  before :started, 'silverstripe:check'
   before :updating, 'silverstripe:db:backup'
   before :updating, 'silverstripe:db:purge'
   after :updated, 'silverstripe:composer:update'
